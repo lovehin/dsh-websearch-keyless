@@ -1,0 +1,25 @@
+# dsh-websearch-keyless bundle patch.
+#
+# 1. Point the `web` capability seam's search side at the provider id that
+#    lib/index.js registers.
+# 2. Re-state `fetchProvider: http` EXPLICITLY.
+#
+# Why (2) is required: an id-targeted patch entry replaces the matched plugin's
+# `config` object rather than deep-merging into it. The shipped default lives in
+# @deepseek-ai/dsh-web-app's patch layer as
+#     { searchProvider: deepseek-official, fetchProvider: http }
+# so overriding only `searchProvider` silently drops `fetchProvider`, and every
+# web_fetch call then fails with WEB_PROVIDER_AMBIGUOUS because both
+# `deepseek-fetch-api` and `http` remain registered and usable.
+#
+# Mirrors the wiring shape used by @anysearch/anysearch-dsh, minus the DSH peer
+# dependencies that the 0.2.1-rc.3 compatibility gate refuses to load.
+
+- id: web
+  config:
+    searchProvider: opencode-keyless
+    fetchProvider: http
+
+- insert:
+    - id: web-search-opencode-keyless
+      name: 'dsh-websearch-keyless'
