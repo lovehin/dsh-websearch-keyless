@@ -42,6 +42,18 @@ returns nothing:
 No signup, no key, no config. Only `web_search` is taken over — `web_fetch` keeps using the
 built-in HTTP provider.
 
+### How this differs from other keyless DSH search plugins
+
+There are several keyless plugins for DSH now. Some read public search endpoints directly (for
+example DuckDuckGo HTML or Bing), which works, but tends to return thin snippets with no
+first-party metadata.
+
+This one calls the same first-party search APIs that OpenCode uses, in keyless mode:
+
+- real titles and body snippets rather than scraped result markup
+- three independent providers, so one being throttled does not take search down
+- two source files, zero dependencies, no build step, no DSH peer dependencies
+
 ## Install
 
 Replace `<profile>` with the profile you actually boot: `desktop` for the desktop app, `web` for
